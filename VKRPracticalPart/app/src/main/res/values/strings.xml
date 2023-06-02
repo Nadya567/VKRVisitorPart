@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">VKRFoodApplication</string>
+    <string name="menu_text">Меню</string>
+    <string name="button_salads_text">Салаты</string>
+    <string name="button_soups_text">Супы</string>
+    <string name="button_hot_dishes_text">Горячие блюда</string>
+    <string name="button_second_dish_text">Гарниры</string>
+    <string name="button_drinks">Напитки</string>
+    <string name="button_desserts_text">Десерты</string>
+    <string name="favorite_text">Избранное</string>
+    <string name="basket_text">Корзина</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
