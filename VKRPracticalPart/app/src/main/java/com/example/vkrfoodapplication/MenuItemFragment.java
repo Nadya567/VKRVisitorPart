@@ -19,29 +19,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuItemFragment extends Fragment {
 
     public ImageView foodImage;
     public TextView foodName;
     public TextView foodPrice;
-    private int i;
-    private int number;
     Button openInformationButton;
+
+
+    String dishNumber;
+    String dishName;
+    String dishPrice;
+    String dishDescription;
+    int category;
 
 
     public MenuItemFragment() {
     }
 
-    public MenuItemFragment(int _i, int _number) {
-        i = _i;
-        number = _number;
-
+    public MenuItemFragment(String _dishNumber, String _dishName, String _dishPrice, String _dishDescription, int _category) {
+        dishNumber = _dishNumber;
+        dishName = _dishName;
+        dishPrice = _dishPrice;
+        dishDescription = _dishDescription;
+        category = _category;
     }
 
     public static MenuItemFragment newInstance(int h) {
@@ -74,13 +87,9 @@ public class MenuItemFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                int category = i;
-                int dishNumber = number;
-
-
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FoodDescriptionFragment foodDescriptionFragment = new FoodDescriptionFragment(category, dishNumber);
+                FoodDescriptionFragment foodDescriptionFragment = new FoodDescriptionFragment(dishNumber, dishName, dishPrice, dishDescription, category);
                 fragmentTransaction.replace(R.id.description_food_container, foodDescriptionFragment);
                 fragmentTransaction.commit();
 
@@ -99,70 +108,61 @@ public class MenuItemFragment extends Fragment {
 
     public void changeText()
     {
-        if(number == 0)
+        if(category == 0)
         {
-            String[] names = getResources().getStringArray(R.array.SaladsName);
-            String[] prices = getResources().getStringArray(R.array.SaladsPrices);
+            //String[] names = getResources().getStringArray(R.array.SaladsName);
+            //String[] prices = getResources().getStringArray(R.array.SaladsPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.SaladsImages);
 
-            foodName.setText(names[i]);
-            foodImage.setImageResource(images.getResourceId(i,0));
-            foodPrice.setText(prices[i]);
+            foodName.setText(dishName);
+            foodImage.setImageResource(images.getResourceId(Integer.parseInt(dishNumber),0));
+            foodPrice.setText(dishPrice);
         }
 
-        if(number == 1)
+
+        if(category == 1)
         {
-            String[] names = getResources().getStringArray(R.array.SoupsName);
-            String[] prices = getResources().getStringArray(R.array.SoupsPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.SoupsImages);
 
-            foodName.setText(names[i]);
-            foodImage.setImageResource(images.getResourceId(i,0));
-            foodPrice.setText(prices[i]);
+            foodName.setText(dishName);
+            foodImage.setImageResource(images.getResourceId(Integer.parseInt(dishNumber),0));
+            foodPrice.setText(dishPrice);
         }
 
-        if(number == 2)
+        if(category == 2)
         {
-            String[] names = getResources().getStringArray(R.array.HotDishesName);
-            String[] prices = getResources().getStringArray(R.array.HotDishesPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.HotDishesImages);
 
-            foodName.setText(names[i]);
-            foodImage.setImageResource(images.getResourceId(i,0));
-            foodPrice.setText(prices[i]);
+            foodName.setText(dishName);
+            foodImage.setImageResource(images.getResourceId(Integer.parseInt(dishNumber),0));
+            foodPrice.setText(dishPrice);
         }
 
-        if(number == 3)
+        if(category == 3)
         {
-            String[] names = getResources().getStringArray(R.array.SecondDishesName);
-            String[] prices = getResources().getStringArray(R.array.SecondDishesPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.SecondDishesImages);
 
-            foodName.setText(names[i]);
-            foodImage.setImageResource(images.getResourceId(i,0));
-            foodPrice.setText(prices[i]);
+            foodName.setText(dishName);
+            foodImage.setImageResource(images.getResourceId(Integer.parseInt(dishNumber),0));
+            foodPrice.setText(dishPrice);
         }
 
-        if(number == 4)
+        if(category == 4)
         {
-            String[] names = getResources().getStringArray(R.array.DrinksName);
-            String[] prices = getResources().getStringArray(R.array.DrinksPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.DrinksImages);
 
-            foodName.setText(names[i]);
-            foodImage.setImageResource(images.getResourceId(i,0));
-            foodPrice.setText(prices[i]);
+            foodName.setText(dishName);
+            foodImage.setImageResource(images.getResourceId(Integer.parseInt(dishNumber),0));
+            foodPrice.setText(dishPrice);
         }
 
-        if(number == 5)
+        if(category == 5)
         {
-            String[] names = getResources().getStringArray(R.array.DessertsName);
-            String[] prices = getResources().getStringArray(R.array.DessertsPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.DessertsImages);
 
-            foodName.setText(names[i]);
-            foodImage.setImageResource(images.getResourceId(i,0));
-            foodPrice.setText(prices[i]);
+            foodName.setText(dishName);
+            foodImage.setImageResource(images.getResourceId(Integer.parseInt(dishNumber),0));
+            foodPrice.setText(dishPrice);
         }
     }
 

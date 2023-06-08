@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -29,8 +31,14 @@ import java.io.OutputStreamWriter;
 
 public class FoodDescriptionFragment extends Fragment {
 
-    private int dishNumber;
-    private int category;
+    //private int dishNumber;
+    //private int category;
+
+    String dishNumber;
+    String dishName;
+    String dishPrice;
+    String dishDescription;
+    int category;
 
     ImageView bigPicture;
     TextView textTitle;
@@ -45,8 +53,11 @@ public class FoodDescriptionFragment extends Fragment {
     //FavoriteFoodActivity favoriteFoodActivity = (FavoriteFoodActivity)getApplicationContext();;
     FavoriteFoodList favoriteFoodList = new FavoriteFoodList();
 
-    public FoodDescriptionFragment(int _number, int _category) {
-        dishNumber = _number;
+    public FoodDescriptionFragment(String _dishNumber, String _dishName, String _dishPrice, String _dishDescription, int _category) {
+        dishNumber = _dishNumber;
+        dishName = _dishName;
+        dishPrice = _dishPrice;
+        dishDescription = _dishDescription;
         category = _category;
     }
 
@@ -74,7 +85,7 @@ public class FoodDescriptionFragment extends Fragment {
        putInCardButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               saveCardFile(dishNumber,category);
+               saveCardFile(dishName);
            }
        });
 
@@ -84,7 +95,7 @@ public class FoodDescriptionFragment extends Fragment {
                //favoriteFoodList.FillingFavoriteDishesArray(category, dishNumber);
 
                //saveFile(textTitle.getText().toString(), textPrice.getText().toString());
-               saveFile(dishNumber, category);
+               saveFile(dishName);
            }
        });
 
@@ -103,68 +114,64 @@ public class FoodDescriptionFragment extends Fragment {
     {
         if(category == 0)
         {
-            String[] names = getResources().getStringArray(R.array.SaladsName);
-            String[] prices = getResources().getStringArray(R.array.SaladsPrices);
+            //String[] names = getResources().getStringArray(R.array.SaladsName);
+            //String[] prices = getResources().getStringArray(R.array.SaladsPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.SaladsImages);
 
-            bigPicture.setImageResource(images.getResourceId(dishNumber, category));
-            textTitle.setText(names[dishNumber]);
-            textDescription.setText(prices[dishNumber]);
+            bigPicture.setImageResource(images.getResourceId(Integer.parseInt(dishNumber), category));
+            textTitle.setText(dishName);
+            textDescription.setText(dishDescription);
+            textPrice.setText(dishPrice);
         }
 
         if(category == 1)
         {
-            String[] names = getResources().getStringArray(R.array.SoupsName);
-            String[] prices = getResources().getStringArray(R.array.SoupsPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.SoupsImages);
 
-            bigPicture.setImageResource(images.getResourceId(dishNumber, category));
-            textTitle.setText(names[dishNumber]);
-            textDescription.setText(prices[dishNumber]);
+            bigPicture.setImageResource(images.getResourceId(Integer.parseInt(dishNumber), category));
+            textTitle.setText(dishName);
+            textDescription.setText(dishDescription);
+            textPrice.setText(dishPrice);
         }
 
         if(category == 2)
         {
-            String[] names = getResources().getStringArray(R.array.HotDishesName);
-            String[] prices = getResources().getStringArray(R.array.HotDishesPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.HotDishesImages);
 
-            bigPicture.setImageResource(images.getResourceId(dishNumber, category));
-            textTitle.setText(names[dishNumber]);
-            textDescription.setText(prices[dishNumber]);
+            bigPicture.setImageResource(images.getResourceId(Integer.parseInt(dishNumber), category));
+            textTitle.setText(dishName);
+            textDescription.setText(dishDescription);
+            textPrice.setText(dishPrice);
         }
 
         if(category == 3)
         {
-            String[] names = getResources().getStringArray(R.array.SecondDishesName);
-            String[] prices = getResources().getStringArray(R.array.SecondDishesPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.SecondDishesImages);
 
-            bigPicture.setImageResource(images.getResourceId(dishNumber, category));
-            textTitle.setText(names[dishNumber]);
-            textDescription.setText(prices[dishNumber]);
+            bigPicture.setImageResource(images.getResourceId(Integer.parseInt(dishNumber), category));
+            textTitle.setText(dishName);
+            textDescription.setText(dishDescription);
+            textPrice.setText(dishPrice);
         }
 
         if(category == 4)
         {
-            String[] names = getResources().getStringArray(R.array.DrinksName);
-            String[] prices = getResources().getStringArray(R.array.DrinksPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.DrinksImages);
 
-            bigPicture.setImageResource(images.getResourceId(dishNumber, category));
-            textTitle.setText(names[dishNumber]);
-            textDescription.setText(prices[dishNumber]);
+            bigPicture.setImageResource(images.getResourceId(Integer.parseInt(dishNumber), category));
+            textTitle.setText(dishName);
+            textDescription.setText(dishDescription);
+            textPrice.setText(dishPrice);
         }
 
         if(category == 5)
         {
-            String[] names = getResources().getStringArray(R.array.DessertsName);
-            String[] prices = getResources().getStringArray(R.array.DessertsPrices);
             TypedArray images = getResources().obtainTypedArray(R.array.DessertsImages);
 
-            bigPicture.setImageResource(images.getResourceId(dishNumber, category));
-            textTitle.setText(names[dishNumber]);
-            textDescription.setText(prices[dishNumber]);
+            bigPicture.setImageResource(images.getResourceId(Integer.parseInt(dishNumber), category));
+            textTitle.setText(dishName);
+            textDescription.setText(dishDescription);
+            textPrice.setText(dishPrice);
         }
 
     }
@@ -209,7 +216,38 @@ public class FoodDescriptionFragment extends Fragment {
         }
     }*/
 
-    public void saveFile(Integer dishNumber, Integer category)
+    public void saveFile(String name)
+    {
+        StringBuffer buffer = openFile();
+        try
+        {
+            if(buffer != null)
+            {
+                buffer.append(name + "\n");
+                OutputStream outputStream = requireActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+                outputStreamWriter.write(buffer.toString());
+                outputStreamWriter.close();
+                Toast.makeText(getActivity(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            OutputStream outputStream = requireActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            //outputStreamWriter.write("");
+            outputStreamWriter.write(name);
+            outputStreamWriter.close();
+            Toast.makeText(getActivity(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*public void saveFile(Integer dishNumber, Integer category)
     {
         StringBuffer buffer = openFile();
         try
@@ -239,8 +277,7 @@ public class FoodDescriptionFragment extends Fragment {
         {
             e.printStackTrace();
         }
-    }
-
+    }*/
 
     public StringBuffer openFile() {
         try {
@@ -267,15 +304,14 @@ public class FoodDescriptionFragment extends Fragment {
 
 
 
-    public void saveCardFile(Integer dishNumber, Integer category)
+    public void saveCardFile(String name)
     {
         StringBuffer buffer = openCardFile();
         try
         {
             if(buffer != null)
             {
-                buffer.append(dishNumber.toString() + "\n");
-                buffer.append(category.toString() + "\n");
+                buffer.append(name + "\n");
                 OutputStream outputStream = requireActivity().openFileOutput(cardFileName, Context.MODE_PRIVATE);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
                 outputStreamWriter.write(buffer.toString());
@@ -287,8 +323,7 @@ public class FoodDescriptionFragment extends Fragment {
             OutputStream outputStream = requireActivity().openFileOutput(cardFileName, Context.MODE_PRIVATE);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
             //outputStreamWriter.write("");
-            outputStreamWriter.write(dishNumber.toString() + "\n");
-            outputStreamWriter.write(category.toString());
+            outputStreamWriter.write(name);
             outputStreamWriter.close();
             Toast.makeText(getActivity(),"Добавлено в корзину", Toast.LENGTH_SHORT).show();
         }

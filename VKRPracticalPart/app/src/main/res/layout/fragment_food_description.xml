@@ -28,7 +28,6 @@
             android:id="@+id/big_food_image"
             android:layout_width="300dp"
             android:layout_height="200dp"
-            android:background="@drawable/vinegret"
             android:layout_margin="10dp"
 
             app:layout_constraintBottom_toTopOf="@id/food_title"
@@ -52,6 +51,7 @@
             android:id="@+id/food_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:text="Состав: свекла, картофель,\nогурец соленый, горох,\nморковь"
             android:textSize="25sp"
 
@@ -63,13 +63,24 @@
             android:id="@+id/food_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="150 руб"
+            android:text="150"
             android:textSize="25sp"
 
             app:layout_constraintBottom_toTopOf="@+id/put_in_card_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/food_description" />
+
+        <TextView
+            android:id="@+id/food_price_rub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" руб"
+            android:textSize="25sp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/food_price"
+            app:layout_constraintStart_toEndOf="@+id/food_price"
+            app:layout_constraintTop_toTopOf="@+id/food_price" />
 
         <Button
             android:id="@+id/put_in_card_button"

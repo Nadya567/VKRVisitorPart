@@ -7,11 +7,16 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -84,14 +89,32 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItemFragment menuItemFragment = new MenuItemFragment();
 
-                for(int i = 0; i < 4; i++)
-                {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MenuItemFragment menuItemFragment = new MenuItemFragment(i, 0);
-                    fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
-                    fragmentTransaction.commit();
-                }
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Menu");
+                query.orderByDescending("createdAt");
+                query.findInBackground((objects, e) -> {
+                    if(e == null)
+                    {
+                        int size = objects.size();
+
+                        for(int i = 0; i < size; i++)
+                        {
+                            if(objects.get(i).getNumber("CategoryNumber").toString().equals("0"))
+                            {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(i).getNumber("DishNumber").toString(), objects.get(i).getString("DishName"),
+                                        objects.get(i).getNumber("DishPrice").toString(),  objects.get(i).getString("DishDescription"),0);
+                                fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Log.d("!!!!&", "!!!");
+                    }
+                });
             }
         });
 
@@ -107,16 +130,32 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItemFragment menuItemFragment = new MenuItemFragment();
 
-                for(int i = 0; i < 3; i++)
-                {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MenuItemFragment menuItemFragment = new MenuItemFragment(i, 1);
-                    fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
-                    fragmentTransaction.commit();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Menu");
+                query.orderByDescending("createdAt");
+                query.findInBackground((objects, e) -> {
+                    if(e == null)
+                    {
+                        int size = objects.size();
 
-                    //menuItemFragment.changeText(i);
-                }
+                        for(int i = 0; i < size; i++)
+                        {
+                            if(objects.get(i).getNumber("CategoryNumber").toString().equals("1"))
+                            {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(i).getNumber("DishNumber").toString(), objects.get(i).getString("DishName"),
+                                        objects.get(i).getNumber("DishPrice").toString(), objects.get(i).getString("DishDescription"), 1);
+                                fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Log.d("!!!!&", "!!!");
+                    }
+                });
             }
         });
 
@@ -132,16 +171,32 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItemFragment menuItemFragment = new MenuItemFragment();
 
-                for(int i = 0; i < 3; i++)
-                {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MenuItemFragment menuItemFragment = new MenuItemFragment(i, 2);
-                    fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
-                    fragmentTransaction.commit();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Menu");
+                query.orderByDescending("createdAt");
+                query.findInBackground((objects, e) -> {
+                    if(e == null)
+                    {
+                        int size = objects.size();
 
-                    //menuItemFragment.changeText(i);
-                }
+                        for(int i = 0; i < size; i++)
+                        {
+                            if(objects.get(i).getNumber("CategoryNumber").toString().equals("2"))
+                            {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(i).getNumber("DishNumber").toString(), objects.get(i).getString("DishName"),
+                                        objects.get(i).getNumber("DishPrice").toString(), objects.get(i).getString("DishDescription"), 2);
+                                fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Log.d("!!!!&", "!!!");
+                    }
+                });
             }
         });
 
@@ -157,16 +212,32 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItemFragment menuItemFragment = new MenuItemFragment();
 
-                for(int i = 0; i < 10; i++)
-                {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MenuItemFragment menuItemFragment = new MenuItemFragment(i, 3);
-                    fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
-                    fragmentTransaction.commit();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Menu");
+                query.orderByDescending("createdAt");
+                query.findInBackground((objects, e) -> {
+                    if(e == null)
+                    {
+                        int size = objects.size();
 
-                    //menuItemFragment.changeText(i);
-                }
+                        for(int i = 0; i < size; i++)
+                        {
+                            if(objects.get(i).getNumber("CategoryNumber").toString().equals("3"))
+                            {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(i).getNumber("DishNumber").toString(), objects.get(i).getString("DishName"),
+                                        objects.get(i).getNumber("DishPrice").toString(), objects.get(i).getString("DishDescription"), 3);
+                                fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Log.d("!!!!&", "!!!");
+                    }
+                });
             }
         });
 
@@ -182,16 +253,32 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItemFragment menuItemFragment = new MenuItemFragment();
 
-                for(int i = 0; i < 10; i++)
-                {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MenuItemFragment menuItemFragment = new MenuItemFragment(i, 4);
-                    fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
-                    fragmentTransaction.commit();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Menu");
+                query.orderByDescending("createdAt");
+                query.findInBackground((objects, e) -> {
+                    if(e == null)
+                    {
+                        int size = objects.size();
 
-                    //menuItemFragment.changeText(i);
-                }
+                        for(int i = 0; i < size; i++)
+                        {
+                            if(objects.get(i).getNumber("CategoryNumber").toString().equals("4"))
+                            {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(i).getNumber("DishNumber").toString(), objects.get(i).getString("DishName"),
+                                        objects.get(i).getNumber("DishPrice").toString(), objects.get(i).getString("DishDescription"), 4);
+                                fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Log.d("!!!!&", "!!!");
+                    }
+                });
             }
         });
 
@@ -207,16 +294,32 @@ public class MainActivity extends AppCompatActivity {
 
                 //MenuItemFragment menuItemFragment = new MenuItemFragment();
 
-                for(int i = 0; i < 10; i++)
-                {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    MenuItemFragment menuItemFragment = new MenuItemFragment(i, 5);
-                    fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
-                    fragmentTransaction.commit();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Menu");
+                query.orderByDescending("createdAt");
+                query.findInBackground((objects, e) -> {
+                    if(e == null)
+                    {
+                        int size = objects.size();
 
-                    //menuItemFragment.changeText(i);
-                }
+                        for(int i = 0; i < size; i++)
+                        {
+                            if(objects.get(i).getNumber("CategoryNumber").toString().equals("5"))
+                            {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(i).getNumber("DishNumber").toString(), objects.get(i).getString("DishName"),
+                                        objects.get(i).getNumber("DishPrice").toString(), objects.get(i).getString("DishDescription"), 5);
+                                fragmentTransaction.add(R.id.description_food_container, menuItemFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Log.d("!!!!&", "!!!");
+                    }
+                });
             }
         });
     }

@@ -71,7 +71,7 @@
         <item>@drawable/kotleta</item>
         <item>@drawable/gulyash</item>
         <item>@drawable/zharenaya_ryba</item>
-        <item>Греческий</item>
+        <item>@drawable/zharenaya_kuriza</item>
         <item>Оливье</item>
         <item>Селедка под шубой</item>
     </string-array>
