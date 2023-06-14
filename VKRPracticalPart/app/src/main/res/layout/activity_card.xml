@@ -20,6 +20,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/order_number_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="25sp"
+
+        app:layout_constraintStart_toEndOf="@+id/card_text"
+        app:layout_constraintTop_toTopOf="@+id/card_text"
+        app:layout_constraintBottom_toBottomOf="@+id/card_text"
+        app:layout_constraintEnd_toStartOf="@+id/clear_card_button"/>
+
     <Button
         android:id="@+id/clear_card_button"
         android:layout_width="50dp"

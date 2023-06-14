@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -23,13 +25,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 
 public class CardActivity extends AppCompatActivity {
 
     public String cardFileName = "foodInCardFile.txt";
     private String dishNameInArray;
+    private String[] dishArrayInOrder = new String[10];
     private int summaryCoast = 0;
-    private String[] dishArray = new String[2];
+    private String[] dishArray;
+    private int orderNumber;
+    private int productsInOrderCounter = 0;
 
 
     Button goToFavoriteFoodButton;
@@ -37,6 +43,8 @@ public class CardActivity extends AppCompatActivity {
     Button makeOrderButton;
     Button clearCardButton;
     TextView orderPrice;
+    LinearLayout cardFoodContainer;
+    TextView orderNumberText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,8 @@ public class CardActivity extends AppCompatActivity {
         makeOrderButton = findViewById(R.id.make_order_button);
         clearCardButton = findViewById(R.id.clear_card_button);
         orderPrice = findViewById(R.id.finish_price_text);
+        cardFoodContainer = findViewById(R.id.card_food_container);
+        orderNumberText = findViewById(R.id.order_number_text);
 
 
         goToFavoriteFoodButton.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +87,7 @@ public class CardActivity extends AppCompatActivity {
                 layout.removeAllViews();
                 orderPrice.setText("0 руб");
 
-                //sendOrderToDashboard();
+                sendOrderToDashboard();
                 Toast.makeText(CardActivity.this, "Заказ оформлен", Toast.LENGTH_SHORT).show();
             }
         });
@@ -88,7 +98,9 @@ public class CardActivity extends AppCompatActivity {
                 LinearLayout layout = findViewById(R.id.card_food_container);
                 layout.removeAllViews();
                 clearFile();
+                productsInOrderCounter = 0;
                 orderPrice.setText("0 руб");
+                Arrays.fill(dishArrayInOrder, "");
             }
         });
     }
@@ -194,6 +206,8 @@ public class CardActivity extends AppCompatActivity {
                                     MenuItemFragment menuItemFragment = new MenuItemFragment(objects.get(o).getNumber("DishNumber").toString(), objects.get(o).getString("DishName"),
                                             objects.get(o).getNumber("DishPrice").toString(), objects.get(o).getString("DishDescription"),
                                             Integer.parseInt((objects.get(o).getNumber("CategoryNumber")).toString()));
+                                    dishArrayInOrder[j] = dishNameInArray;
+                                    productsInOrderCounter++;
 
                                     summaryCoast = summaryCoast + Integer.parseInt(objects.get(o).getNumber("DishPrice").toString());
                                     String s = String.valueOf(summaryCoast);
@@ -242,6 +256,7 @@ public class CardActivity extends AppCompatActivity {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
             outputStreamWriter.write("");
             outputStreamWriter.close();
+            Log.d("!!!!2", "Cleared");
             //Toast.makeText(getActivity(), "Добавлено в избранное", Toast.LENGTH_SHORT).show();
         }
 
@@ -252,25 +267,70 @@ public class CardActivity extends AppCompatActivity {
     }
 
 
-    /*private void sendOrderToDashboard()
+    private void sendOrderToDashboard()
     {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOrders");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("OrderNumber");
         query.orderByDescending("createdAt");
 
-        query.findInBackground((objects, e) -> {
+        query.getInBackground("iM4W3C4MBD", new GetCallback<ParseObject>() {
+            public void done(ParseObject number, ParseException e) {
+                if (e == null) {
+                    orderNumber = Integer.parseInt(number.getNumber("Number").toString());
+                    Log.d("!!!!", String.valueOf(orderNumber));
+
+                    String numberText = "Заказ № " + String.valueOf(orderNumber);
+                    orderNumberText.setText(numberText);
+
+                    if(orderNumber <= 99)
+                    {
+                        number.increment("Number");
+                    }
+
+                    else
+                    {
+                        number.put("Number", 1);
+                    }
+
+
+                    number.increment("OrdersCount");
+
+                    number.saveInBackground();
+                    sendOrder();
+                }
+                else
+                {
+                    Log.d("!!!!&", "!!!");
+                }
+            }
+        });
+    }
+
+    private void sendOrder()
+    {
+        ParseQuery<ParseObject> queryOrder = ParseQuery.getQuery("ProductOrders");
+        queryOrder.orderByDescending("createdAt");
+
+        queryOrder.findInBackground((objects, e) -> {
             if(e == null)
             {
-                ParseObject dish = new ParseObject("ProductOrders");
+                //int count = cardFoodContainer.getChildCount(); //!!!!!!!!!!
+                //Log.d("!!!!3", String.valueOf(count));
+                for(int i = 0; i < productsInOrderCounter; i++)
+                {
+                    ParseObject dish = new ParseObject("ProductOrders");
 
-                dish.put("ID", 6);
-                dish.put("Dish", dishCategory);
+                    dish.put("OrderNumber", orderNumber);
+                    Log.d("!!!!1", String.valueOf(orderNumber));
+                    dish.put("DishName", dishArrayInOrder[i]);
 
-                dish.saveInBackground();
+                    dish.saveInBackground();
+                }
+                clearFile();
             }
             else
             {
                 Log.d("!!!!&", "!!!");
             }
         });
-    }*/
+    }
 }
